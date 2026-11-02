@@ -19,7 +19,9 @@ python3 -m http.server 8080
 
 ## GitHub Pages
 
-Repo pushen → Settings → Pages → Branch `main`, Ordner `/ (root)`.
+Live: **https://horttcore.github.io/teach-zeitstrahl/**
+
+Branch `main`, Ordner `/ (root)`.
 
 ## Anpassen
 
