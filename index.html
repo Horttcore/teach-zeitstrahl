@@ -9,7 +9,14 @@
   <body>
     <div class="app">
       <header class="header">
-        <h1>Interaktiver Zahlenstrahl</h1>
+        <div class="header-top">
+          <h1>Interaktiver Zahlenstrahl</h1>
+          <p class="streak" id="streak" aria-live="polite">
+            <span class="streak-label">Serie</span>
+            <span class="streak-count" id="streak-count">0</span>
+            <span class="streak-text">in Folge richtig</span>
+          </p>
+        </div>
         <p class="subtitle">Setze die gesuchte Zahl zwischen Untergrenze und Obergrenze.</p>
       </header>
 

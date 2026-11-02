@@ -11,10 +11,51 @@ import {
 } from "./scale.js";
 import { fireConfetti } from "./confetti.js";
 
+const STREAK_STORAGE = "teach-zeitstrahl-streak";
+const BEST_STORAGE = "teach-zeitstrahl-best-streak";
+
 let round = { min: 0, max: 100, target: 47 };
 let placement = 0.5;
 let checked = false;
 let drag = { active: false };
+let streak = 0;
+let bestStreak = 0;
+
+function loadStreak() {
+  streak = Number.parseInt(localStorage.getItem(STREAK_STORAGE) ?? "0", 10) || 0;
+  bestStreak = Number.parseInt(localStorage.getItem(BEST_STORAGE) ?? "0", 10) || 0;
+}
+
+function saveStreak() {
+  localStorage.setItem(STREAK_STORAGE, String(streak));
+  localStorage.setItem(BEST_STORAGE, String(bestStreak));
+}
+
+function updateStreakUI(animate = false) {
+  const el = document.getElementById("streak-count");
+  el.textContent = formatNumber(streak);
+  const wrap = document.getElementById("streak");
+  wrap.title =
+    bestStreak > 0 ? `Dein Rekord: ${formatNumber(bestStreak)} in Folge` : "";
+  if (animate) {
+    wrap.classList.remove("is-bump");
+    void wrap.offsetWidth;
+    wrap.classList.add("is-bump");
+  }
+}
+
+function recordAnswer(ok) {
+  if (ok) {
+    streak += 1;
+    if (streak > bestStreak) bestStreak = streak;
+    saveStreak();
+    updateStreakUI(true);
+  } else {
+    streak = 0;
+    saveStreak();
+    updateStreakUI(false);
+  }
+}
 
 const track = () => document.getElementById("numberline-track");
 const marker = () => document.getElementById("numberline-marker");
@@ -88,10 +129,12 @@ function checkAnswer() {
   if (ok) {
     placement = valueToPosition(round.target, round.min, round.max);
     updateMarkerVisual();
+    recordAnswer(true);
     fb.textContent = "Super! Das ist die richtige Stelle.";
     fb.className = "feedback is-success";
     fireConfetti();
   } else {
+    recordAnswer(false);
     const correctPct = valueToPosition(round.target, round.min, round.max) * 100;
     track().classList.add("show-solution");
     track().style.setProperty("--solution-pct", `${correctPct}%`);
@@ -156,5 +199,7 @@ function setupInteraction() {
   document.getElementById("btn-next").addEventListener("click", startRound);
 }
 
+loadStreak();
+updateStreakUI();
 startRound();
 setupInteraction();

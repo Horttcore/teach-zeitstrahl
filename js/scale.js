@@ -17,24 +17,17 @@ export function positionToValue(t, min, max) {
 
 /**
  * Zahlenraum nach Obergrenze des Strahls.
- * Zehner → 1 · Hunderter → 10 · Tausender → 100 · … · Million → 100 000
+ * Snap feiner als Hilfsstriche (Werte können zwischen Markierungen liegen).
  */
-export function zahlenraum(max) {
-  if (max <= 100) return "zehner";
-  if (max < 1_000) return "hunderter";
-  if (max < 10_000) return "tausender";
-  if (max < 100_000) return "zehntausender";
-  if (max < 1_000_000) return "hunderttausender";
-  return "million";
-}
 
-export function stepSize(min, max) {
+/** Grobe Hilfsstriche am Strahl (ohne Labels). */
+export function tickStep(min, max) {
   const span = max - min;
   if (span <= 0) return 1;
 
   switch (zahlenraum(max)) {
     case "zehner":
-      return 1;
+      return 10;
     case "hunderter":
       return 10;
     case "tausender":
@@ -45,6 +38,29 @@ export function stepSize(min, max) {
       return 10_000;
     case "million":
       return 100_000;
+    default:
+      return 10;
+  }
+}
+
+/** Feines Snap-Raster am Handle (≈ doppelt so viele Stufen wie früher). */
+export function stepSize(min, max) {
+  const span = max - min;
+  if (span <= 0) return 1;
+
+  switch (zahlenraum(max)) {
+    case "zehner":
+      return 1;
+    case "hunderter":
+      return 5;
+    case "tausender":
+      return 50;
+    case "zehntausender":
+      return 500;
+    case "hunderttausender":
+      return 5_000;
+    case "million":
+      return 50_000;
     default:
       return 1;
   }
@@ -112,10 +128,13 @@ export function randomStartPlacement(min, max, target) {
   return valueToPosition(value, min, max);
 }
 
-/** Hilfsstriche ohne Labels — im Zehner-Raum alle 10, sonst wie Snap-Schritt. */
-export function tickStep(min, max) {
-  if (max <= 100) return 10;
-  return stepSize(min, max);
+export function zahlenraum(max) {
+  if (max <= 100) return "zehner";
+  if (max < 1_000) return "hunderter";
+  if (max < 10_000) return "tausender";
+  if (max < 100_000) return "zehntausender";
+  if (max < 1_000_000) return "hunderttausender";
+  return "million";
 }
 
 export function tickValues(min, max) {
