@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Zahlenstrahl — Zahl einordnen</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header class="header">
+        <h1>Interaktiver Zahlenstrahl</h1>
+        <p class="subtitle">Setze die gesuchte Zahl zwischen Untergrenze und Obergrenze.</p>
+      </header>
+
+      <main>
+        <section class="task-card">
+          <p class="task-label">Aufgabe</p>
+          <p class="task-text">
+            Setze die Zahl
+            <strong class="task-target" id="task-target" aria-live="polite">—</strong>
+            auf den Zahlenstrahl.
+          </p>
+          <p class="task-hint" id="task-hint"></p>
+        </section>
+
+        <section class="numberline-card" aria-labelledby="numberline-title">
+          <h2 id="numberline-title" class="visually-hidden">Zahlenstrahl</h2>
+
+          <div class="bound bound-lower" id="bound-lower">
+            <span class="bound-tag">Untergrenze</span>
+            <span class="bound-value" id="bound-lower-value">0</span>
+          </div>
+
+          <div
+            class="numberline-track"
+            id="numberline-track"
+            role="slider"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+            aria-label="Position der Zahl auf dem Zahlenstrahl"
+            tabindex="0"
+          >
+            <div class="numberline-rail" aria-hidden="true"></div>
+            <div class="numberline-ticks" id="numberline-ticks"></div>
+            <button
+              type="button"
+              class="numberline-marker"
+              id="numberline-marker"
+              aria-label="Deine Position auf dem Strahl"
+            ></button>
+          </div>
+
+          <div class="bound bound-upper" id="bound-upper">
+            <span class="bound-tag">Obergrenze</span>
+            <span class="bound-value" id="bound-upper-value">100</span>
+          </div>
+        </section>
+
+        <p class="interaction-hint">Tippe auf den Strahl, ziehe den Marker oder nutze ← → auf der Tastatur.</p>
+
+        <div class="actions">
+          <button type="button" class="btn-check" id="btn-check">Prüfen</button>
+          <button type="button" class="btn-next" id="btn-next" hidden>Nächste Aufgabe</button>
+        </div>
+
+        <p class="feedback" id="feedback" role="status" aria-live="polite"></p>
+      </main>
+
+      <footer class="footer">
+        <p>Klasse 4 · Zahlenstrahl mit Unter- und Obergrenze</p>
+      </footer>
+    </div>
+    <script type="module" src="./js/app.js"></script>
+  </body>
+</html>
